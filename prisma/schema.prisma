@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique @db.VarChar(32)
+  username   String   @unique @db.VarChar(16)
+  password   String   @db.VarChar(80)
+  first_name String   @db.VarChar(32)
+  last_name  String   @db.VarChar(32)
+  Post       Post[]
+  create_at  DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Post {
+  id            String          @id @default(cuid())
+  title         String          @db.VarChar(32)
+  description   String          @db.Text
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int
+  Post_Category Post_Category[]
+  Post_Tag      Post_Tag[]
+  create_at     DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+}
+
+model Post_Category {
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId     String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId String
+  create_at  DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([postId, categoryId])
+}
+
+model Category {
+  id            String          @id @default(cuid())
+  name          String          @db.VarChar(16)
+  Post_Category Post_Category[]
+  create_at     DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+}
+
+model Post_Tag {
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId     String
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tagId      String
+  create_at  DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([postId, tagId])
+}
+
+model Tag {
+  id         String     @id @default(cuid())
+  name       String     @db.VarChar(16)
+  Post_Tag   Post_Tag[]
+  create_at  DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+}
