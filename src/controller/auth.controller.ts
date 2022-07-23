@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { BodyRequestRegister } from '../interfaces/controller/register.interface';
-import { RegisterSchema } from '../schema/controller/auth.schema';
-import { registerService } from '../services/auth.services';
+import {
+  BodyRequestLogin,
+  BodyRequestRegister,
+} from '../interfaces/controller/register.interface';
+import { LoginSchema, RegisterSchema } from '../schema/controller/auth.schema';
+import { loginService, registerService } from '../services/auth.services';
 
 export const registerController = async (
   req: Request,
@@ -11,10 +14,6 @@ export const registerController = async (
   try {
     const data = req.body as BodyRequestRegister;
     RegisterSchema.parse(data);
-
-    if (!(data.password === data.confirmPassword))
-      throw new Error('Password does not match');
-
     await registerService(data);
     res.status(201).end();
   } catch (error) {
@@ -22,6 +21,17 @@ export const registerController = async (
   }
 };
 
-export const loginController = (req: Request, res: Response) => {
-  res.status(200).send({ owo: 'owo' });
+export const loginController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body as BodyRequestLogin;
+    LoginSchema.parse(data);
+    const token = await loginService(data);
+    res.status(200).send({ token });
+  } catch (error) {
+    next(error);
+  }
 };

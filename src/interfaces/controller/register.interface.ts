@@ -6,3 +6,8 @@ export interface BodyRequestRegister {
   password: string;
   confirmPassword: string;
 }
+
+export interface BodyRequestLogin {
+  email: string;
+  password: string;
+}
