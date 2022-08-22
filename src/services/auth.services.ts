@@ -7,7 +7,7 @@ import {
 } from '../interfaces/controller/register.interface';
 
 export const registerService = async (data: BodyRequestRegister) => {
-  if (!(data.password === data.confirmPassword))
+  if (data.password !== data.confirmPassword)
     throw new Error('Password does not match');
 
   const passwordHash = await bcrypt.hash(data.password, 10);
