@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RequestWithuser } from '../interfaces/controller/auth.interface';
 import { BodyRequestPost } from '../interfaces/controller/posts.interface';
+import { PostSchema } from '../schema/controller/post.schema';
 import {
   getPostsServices,
   getPostServices,
@@ -23,6 +24,7 @@ const getPostController = async (req: Request, res: Response) => {
 
 const createPostController = async (req: Request, res: Response) => {
   const newPost = req.body as BodyRequestPost;
+  PostSchema.parse(newPost);
   const id = parseInt((req as RequestWithuser).userData.id);
   await createPostServices(id, newPost);
   res.status(201).end();
@@ -30,6 +32,7 @@ const createPostController = async (req: Request, res: Response) => {
 
 const updatePostController = async (req: Request, res: Response) => {
   const post = req.body as BodyRequestPost;
+  PostSchema.parse(post);
   const { id } = req.params;
   await updatePostService(id, post);
   res.status(204).end();
