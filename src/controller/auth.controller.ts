@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import {
   BodyRequestLogin,
   BodyRequestRegister,
-} from '../interfaces/controller/register.interface';
+} from '../interfaces/controller/auth.interface';
 import { LoginSchema, RegisterSchema } from '../schema/controller/auth.schema';
 import { loginService, registerService } from '../services/auth.services';
 

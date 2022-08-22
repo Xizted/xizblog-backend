@@ -4,7 +4,7 @@ import db from '../db/db';
 import {
   BodyRequestLogin,
   BodyRequestRegister,
-} from '../interfaces/controller/register.interface';
+} from '../interfaces/controller/auth.interface';
 
 export const registerService = async (data: BodyRequestRegister) => {
   if (data.password !== data.confirmPassword)
