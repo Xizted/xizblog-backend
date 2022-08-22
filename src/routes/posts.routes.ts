@@ -1,10 +1,23 @@
 import { Router } from 'express';
+import {
+  createPostController,
+  deletePostController,
+  getPostController,
+  getPostsController,
+  updatePostController,
+} from '../controller/posts.controller';
+import userExtractor from '../middleware/userExtractor';
+
 const router = Router();
 
-router.get('/');
-router.get('/:id');
-router.post('/create');
-router.put('/update/:id');
-router.delete('/delete/:id');
+router.get('/', getPostsController);
+
+router.get('/:id', getPostController);
+
+router.post('/', userExtractor, createPostController);
+
+router.put('/:id', userExtractor, updatePostController);
+
+router.delete('/:id', userExtractor, deletePostController);
 
 export default router;
