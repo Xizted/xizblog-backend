@@ -11,6 +11,11 @@ const handleError = (
       error,
     });
   }
+
+  if (error.name === 'JsonWebTokenError') {
+    return res.status(401).send({ error });
+  }
+
   res.status(500).send({
     error,
   });
