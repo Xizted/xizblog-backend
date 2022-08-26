@@ -6,6 +6,11 @@ const handleError = (
   res: Response,
   next: NextFunction
 ) => {
+  if (error.name === 'ZodError') {
+    return res.status(400).send({
+      error,
+    });
+  }
   res.status(500).send({
     error,
   });
